@@ -1,4 +1,4 @@
-package it.polito.bigdata.hadoop.exercise1;
+package it.polito.bigdata.hadoop.exercise;
 
 import java.io.IOException;
 
@@ -21,14 +21,13 @@ class MapperBigData extends
 		// Split each sentence in words. Use whitespace(s) as delimiter (=a
 		// space, a tab, a line break, or a form feed)
 		// The split method returns an array of strings
-		String[] fields= value.toString().split("//s");
-		
-		for (String field:fields) {
-			String cleanedWord = field.toLowerCase();
-			if(cleanedWord.compareTo("and")== 0 && cleanedWord.compareTo("or")==0 && 
-					cleanedWord.compareTo("not")==0) {
-				context.write(new Text(cleanedWord), new Text(key));
-			}
-		}
+		String[] words = value.toString().split("\\s+");
+		for(String word:words) {
+			String cleanedWord = word.toLowerCase();
+			if(cleanedWord.compareTo("and")!=0 && cleanedWord.compareTo("or")!=0 
+					&& cleanedWord.compareTo("not")!=0)
+				context.write(new Text(cleanedWord),new Text(key));
+			
+		} 
 	}
 }

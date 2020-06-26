@@ -1,4 +1,4 @@
-package it.polito.bigdata.hadoop.exercise1;
+package it.polito.bigdata.hadoop.exercise;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
