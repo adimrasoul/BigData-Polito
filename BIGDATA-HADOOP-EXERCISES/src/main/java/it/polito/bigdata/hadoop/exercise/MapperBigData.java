@@ -18,23 +18,15 @@ class MapperBigData extends
 
 	protected void setup(Context context) {
 		// I retrieve the value of the threshold only one time for each mapper
-		threshold = 
-			Float.parseFloat(
-					context.getConfiguration().get("maxThreshold"));
+			double threshold;
+			threshold = new Double.ParseDouble
 	}
 
 	protected void map(Text key, // Input key type
 			Text value, // Input value type
 			Context context) throws IOException, InterruptedException {
 
-		float measure;
-
-		measure = Float.parseFloat(value.toString());
-
-		// Filter the reading based on the value of threshold
-		if (measure < threshold) {
-			context.write(new Text(key), 
-					new FloatWritable(measure));
+	
 		}
 
 	}
