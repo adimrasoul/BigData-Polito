@@ -8,7 +8,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 /**
  * Mapper
  */
-class MapperBigData extends
+class MapperBigData12 extends
 		Mapper<Text, // Input key type
 				Text, // Input value type
 				Text, // Output key type
@@ -18,17 +18,22 @@ class MapperBigData extends
 
 	protected void setup(Context context) {
 		// I retrieve the value of the threshold only one time for each mapper
-			double threshold;
-			threshold = new Double.ParseDouble
+			threshold = Float.parseFloat(
+					context.getConfiguration().get("maxThreshold"));
+			
 	}
 
 	protected void map(Text key, // Input key type
 			Text value, // Input value type
 			Context context) throws IOException, InterruptedException {
-
+			
+			float pm10Value;
+			pm10Value = Float.parseFloat(value.toString());
+			if (pm10Value < threshold) {
+				context.write(new Text(key),
+						new FloatWritable(pm10Value));
+			}
 	
 		}
 
 	}
-
-}

@@ -15,7 +15,7 @@ import org.apache.hadoop.util.ToolRunner;
 /**
  * Driver class.
  */
-public class DriverBigData extends Configured implements Tool {
+public class DriverBigData12 extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
@@ -49,7 +49,7 @@ public class DriverBigData extends Configured implements Tool {
 		FileOutputFormat.setOutputPath(job, outputDir);
 
 		// Specify the class of the Driver for this job
-		job.setJarByClass(DriverBigData.class);
+		job.setJarByClass(DriverBigData12.class);
 
 		// Set input format
 		job.setInputFormatClass(KeyValueTextInputFormat.class);
@@ -58,7 +58,7 @@ public class DriverBigData extends Configured implements Tool {
 		job.setOutputFormatClass(TextOutputFormat.class);
 
 		// Set map class
-		job.setMapperClass(MapperBigData.class);
+		job.setMapperClass(MapperBigData12.class);
 
 		// Set map output key and value classes
 		job.setMapOutputKeyClass(Text.class);
@@ -84,7 +84,7 @@ public class DriverBigData extends Configured implements Tool {
 	public static void main(String args[]) throws Exception {
 		// Exploit the ToolRunner class to "configure" and run the Hadoop
 		// application
-		int res = ToolRunner.run(new Configuration(), new DriverBigData(), args);
+		int res = ToolRunner.run(new Configuration(), new DriverBigData12(), args);
 
 		System.exit(res);
 	}
