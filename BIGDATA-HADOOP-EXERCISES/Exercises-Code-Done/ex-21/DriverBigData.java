@@ -3,18 +3,19 @@ package it.polito.bigdata.hadoop.exercise;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+
 /**
- * Driver class.
+ * MapReduce program
  */
 public class DriverBigData extends Configured implements Tool {
 
@@ -34,46 +35,41 @@ public class DriverBigData extends Configured implements Tool {
     // Define a new job
     Job job = Job.getInstance(conf); 
 
+    // Add hdfs file stopwords.txt in the distributed cache
+    // stopwords.txt can now be read by all mappers of this application
+    // independently of the nodes of the cluster used to run the application
+    job.addCacheFile(new Path("stopwords.txt").toUri());
+
     // Assign a name to the job
-    job.setJobName("Exercise 20");
+    job.setJobName("Exercise #21");
     
     // Set path of the input file/folder (if it is a folder, the job reads all the files in the specified folder) for this job
     FileInputFormat.addInputPath(job, inputPath);
     
-    
     // Set path of the output folder for this job
     FileOutputFormat.setOutputPath(job, outputDir);
-
-    // Set multiple outputs. The name of the output files will have 
-    // the prefix specified in the mapper
-    // "hightemp" and "normaltemp" are the "names" of the two prefixes/outputs
-    // Set also map output key and value classes
-    MultipleOutputs.addNamedOutput(job, 
-    		"hightemp", 
-    		TextOutputFormat.class, 
-    		FloatWritable.class, 
-    		NullWritable.class);
-    
-    
-    MultipleOutputs.addNamedOutput(job, 
-    		"normaltemp", 
-    		TextOutputFormat.class, 
-    		Text.class, 
-    		NullWritable.class);
     
     // Specify the class of the Driver for this job
     job.setJarByClass(DriverBigData.class);
     
-    // Set input format
+    // Set job input format
     job.setInputFormatClass(TextInputFormat.class);
-    
+
+    // Set job output format
+    job.setOutputFormatClass(TextOutputFormat.class);
+       
     // Set map class
     job.setMapperClass(MapperBigData.class);
-   
     
+    // Set map output key and value classes
+    job.setMapOutputKeyClass(NullWritable.class);
+    job.setMapOutputValueClass(Text.class);
+    
+
     // Set number of reducers
     job.setNumReduceTasks(0);
-       
+    
+    
     // Execute the job and wait for completion
     if (job.waitForCompletion(true)==true)
     	exitCode=0;
@@ -82,6 +78,7 @@ public class DriverBigData extends Configured implements Tool {
     	
     return exitCode;
   }
+  
 
   /** Main of the driver
    */
