@@ -24,7 +24,7 @@ public class SparkDriver {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		
 		//read the input
-		JavaRDD <String> inputRDD = sc.textFile(inputPath);
+		JavaRDD <String> inputRDD = sc.textFile(inputPath).cache();
 	
 		//map only pmvalues
 		JavaRDD<Double> pmValuesRDD = inputRDD.map( inputLine ->
